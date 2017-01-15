@@ -8,7 +8,7 @@ export cidr="0.0.0.0/0"
 # get the correct ami
 export region=`aws configure get region`
 if [ $region = "us-west-2" ]; then 
-   export ami="ami-bc508adc" # Oregon
+   export ami="ami-9c54f4fc" # Oregon
 elif [ $region = "eu-west-1" ]; then 
    export ami="ami-b43d1ec7" # Ireland
 elif [ $region = "us-east-1" ]; then
@@ -52,7 +52,7 @@ then
 	chmod 400 ~/.ssh/aws-key-$name.pem
 fi
 
-export instanceId=`aws ec2 run-instances --image-id $ami --count 1 --instance-type p2.xlarge --key-name aws-key-$name --security-group-ids $securityGroupId --subnet-id $subnetId --associate-public-ip-address --block-device-mapping "[ { \"DeviceName\": \"/dev/sda1\", \"Ebs\": { \"VolumeSize\": 128, \"VolumeType\": \"gp2\" } } ]" --query 'Instances[0].InstanceId' --output text`
+export instanceId=`aws ec2 run-instances --image-id $ami --count 1 --instance-type p2.xlarge --key-name aws-key-$name --security-group-ids $securityGroupId --subnet-id $subnetId --associate-public-ip-address --block-device-mapping "[ { \"DeviceName\": \"/dev/sda1\", \"Ebs\": { \"VolumeSize\": 30, \"VolumeType\": \"gp2\" } } ]" --query 'Instances[0].InstanceId' --output text`
 aws ec2 create-tags --resources $instanceId --tags --tags Key=Name,Value=$name-gpu-machine
 export allocAddr=`aws ec2 allocate-address --domain vpc --query 'AllocationId' --output text`
 
